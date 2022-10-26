@@ -25,9 +25,25 @@
                 url: baseUrl + 'token'
             })
                 .done(function (msg) {
-                    getStatusNew(msg);
+                    getPlaylistNew(msg);
                 });
         });
+        //47879
+        async function getPlaylistNew(msg) {
+            let url = baseUrl + 'playlistsget?access_token=' + JSON.parse(msg.content).access_token + '&playlistid=527135';
+            debugger;
+            let response = await fetch(baseUrl + 'playlistsget?access_token=' + JSON.parse(msg.content).access_token + '&playlistid=527135');
+
+            if (response.ok) { // if HTTP-status is 200-299
+                // get the response body (the method explained below)
+                let json = await response.json();
+                console.log(json.content);
+                $('#output').text(json.content);
+            } else {
+                console.log(response);
+                alert("HTTP-Error: " + response.status);
+            }
+        }
 
         async function getPlaylistsNew(msg) {
             let response = await fetch(baseUrl + 'playlistsgetlist?access_token=' + JSON.parse(msg.content).access_token);
