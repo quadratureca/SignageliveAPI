@@ -1,0 +1,91 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div id="output">
+
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        let baseUrl = 'https://localhost:7115/';
+
+        $(function () {
+            $.ajax({
+                method: "POST",
+                url: baseUrl + 'token'
+            })
+                .done(function (msg) {
+                    getStatusNew(msg);
+                });
+        });
+
+        async function getPlaylistsNew(msg) {
+            let response = await fetch(baseUrl + 'playlistsgetlist?access_token=' + JSON.parse(msg.content).access_token);
+
+            if (response.ok) { // if HTTP-status is 200-299
+                // get the response body (the method explained below)
+                let json = await response.json();
+                console.log(json.content);
+                $('#output').text(json.content);
+            } else {
+                alert("HTTP-Error: " + response.status);
+            }
+        }
+
+        async function getStatusNew(msg) {
+            let response = await fetch(baseUrl + 'statusget?access_token=' + JSON.parse(msg.content).access_token);
+
+            if (response.ok) { // if HTTP-status is 200-299
+                // get the response body (the method explained below)
+                let json = await response.json();
+                console.log(json.content);
+                $('#output').text(json.content);
+            } else {
+                alert("HTTP-Error: " + response.status);
+            }
+        }
+
+
+
+        function getStatus(msg) {
+            $.ajax({
+                method: "GET",
+                url: baseUrl + 'statusget?access_token=' + JSON.parse(msg.content).access_token
+            })
+                .done(function (result) {
+                    console.log(result.content);
+                });
+        }
+
+        function getPlaylists(msg) {
+            $.ajax({
+                method: "GET",
+                url: baseUrl + 'playlistsgetlist?access_token=' + JSON.parse(msg.content).access_token
+            })
+                .done(function (result) {
+                    console.log(result.content);
+                });
+        }
+
+        function getMediaAssets(msg) {
+            $.ajax({
+                method: "GET",
+                url: baseUrl + 'Mediaassetsgetall?access_token=' + JSON.parse(msg.content).access_token
+            })
+                .done(function (result) {
+                    console.log(result.content);
+                });
+        }
+    </script>
+</body>
+</html>
